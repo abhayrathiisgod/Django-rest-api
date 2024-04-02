@@ -5,6 +5,8 @@ from rest_framework.response import Response
 import json
 from products.models import Product
 from products.serializers import ProductFormSerializer
+from rest_framework.decorators import api_view
+
 # Create your views here.
 '''
 def api_home(request, *args, **kwargs):
@@ -53,27 +55,36 @@ def api_home(request, *args, **kwargs):
     
     #return JsonResponse(data) 
 '''
-from rest_framework.decorators import api_view
-
 # using drf
-@api_view(['GET','POST'])
-def api_home(request,*args,**kwargs):
-    """
-    DRF API VIEW
-    """
+#@api_view(['GET','POST'])
+#def api_home(request,*args,**kwargs):
+  
+    #DRF API VIEW
+
 
     #if request.method == 'GET':
         #return Response({"WARNING: GET METHOD NOT ALLOWED"}, status=405)
     
     
-    instance = Product.objects.all().order_by("?").first()
+    #instance = Product.objects.all().order_by("?").first()
 
     # gotta store  in dict
 
-    data = {}
+    #data = {}
 
-    if instance:
-        data = ProductFormSerializer(instance).data
+    #if instance:
+        #data = ProductFormSerializer(instance).data
 
-    return Response(data)
+    #return Response(data)
 
+@api_view(['GET','POST'])
+def api_home(request, *args,**kwargs):
+    serializers = ProductFormSerializer(data=request.data)
+
+    if serializers.is_valid(raise_exception=True) == True:
+        serializers.save()
+        data = serializers.data
+        print(serializers.data)
+        return Response(data)
+
+    return Response({"WARNING":"NOT GOOD DATA"})

@@ -4,7 +4,7 @@ from django.forms.models import model_to_dict
 from rest_framework.response import Response
 import json
 from products.models import Product
-
+from products.serializers import ProductFormSerializer
 # Create your views here.
 '''
 def api_home(request, *args, **kwargs):
@@ -66,14 +66,14 @@ def api_home(request,*args,**kwargs):
         #return Response({"WARNING: GET METHOD NOT ALLOWED"}, status=405)
     
     
-    model_data = Product.objects.all().order_by("?").first()
+    instance = Product.objects.all().order_by("?").first()
 
     # gotta store  in dict
 
     data = {}
 
-    if model_data:
-        data = model_to_dict(model_data, fields=['id','title','content','disc_price'])
+    if instance:
+        data = ProductFormSerializer(instance).data
 
     return Response(data)
 

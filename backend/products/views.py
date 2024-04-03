@@ -19,7 +19,7 @@ class ProductListCreateApiView(generics.ListCreateAPIView):
         if content is None:
             content = title
         serializer.save()
-
+ 
         #send django signal
 
 product_List_create_view = ProductListCreateApiView.as_view()
@@ -73,6 +73,8 @@ product_detail_view = ProductDetailApiView.as_view()
 
 # product_list_view =  ProductListApiView.as_view()
 
+
+# using function based views to create retrieve list
 @api_view(['GET','POST'])
 def product_alt_view(request,*args, **kwargs):
     method = request.method 

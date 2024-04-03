@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from .models import Product
 
 class ProductFormSerializer(serializers.ModelSerializer):
@@ -9,7 +8,7 @@ class ProductFormSerializer(serializers.ModelSerializer):
         fields = ['title' ,'content', 'price','disc_price','my_discount']
     
     def get_my_discount(self, obj): 
-         
+        
         if not hasattr(obj,'id'):
             return None
         

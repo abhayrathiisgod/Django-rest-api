@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view
 '''
 def api_home(request, *args, **kwargs):
     
-     # request -> http request -> Django
+    # request -> http request -> Django
     # json data -> request.body 
     # request.body
 

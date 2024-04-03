@@ -1,11 +1,9 @@
-from django.db import models
-
-# Create your models here.
+from django.db import models 
 
 class Product(models.Model):
-    title = models.CharField(max_length=50,blank= False, default="Enter Your title")
-    content = models.CharField(max_length=50,blank=True, null=False , default = "enter your content")
-    price = models.DecimalField(max_digits = 8, decimal_places = 4, default= 99.9999)
+    title = models.CharField(max_length=50,blank= False, default= " Enter Your Title ")
+    content = models.CharField(max_length=50,blank=True, null=False , default = " Enter Your Content ")
+    price = models.DecimalField(max_digits = 8, decimal_places = 4, default= 00.000)
 
     def __str__(self) -> str:
         return self.title

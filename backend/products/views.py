@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, mixins, permissions, authentication
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Product
@@ -19,6 +19,8 @@ from django.shortcuts import get_object_or_404
 class ProductListCreateApiView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self,serializer):
         title = serializer.validated_data.get('title')
@@ -74,6 +76,33 @@ class ProductDestroyApiView(generics.DestroyAPIView):
         super().perform_destroy(instance)
         
 product_destroy_view = ProductDestroyApiView.as_view()
+
+
+#                           mixins and generic api view
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+class ProductMixinView(mixins.ListModelMixin, mixins.RetrieveModelMixin ,generics.GenericAPIView):
+
+    queryset = Product.objects.all()
+    serializer_class = ProductFormSerializer
+
+    def get(self,request, *args,**kwargs):
+        print(args,kwargs)
+        pk = kwargs.get('pk')
+        if pk is not None:
+            return self.retrieve(request, *args,**kwargs)
+        
+        return self.list(request, *args, **kwargs)
+    
+product_mixin_view = ProductMixinView.as_view()
 
 #                   Function based Views
 #

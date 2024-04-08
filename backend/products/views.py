@@ -15,12 +15,18 @@ class ProductListCreateAPIView(
 
     def perform_create(self, serializer):
         # serializer.save(user=self.request.user)
+        email = serializer.validated_data.get('email')
+        print(email)
         title = serializer.validated_data.get('title')
         content = serializer.validated_data.get('content') or None
         if content is None:
             content = title
         serializer.save(content=content)
-        # send a Django signal
+        # sends a Django signal
+    
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title')
+        return super.update(instance, validated_data)
 
 product_list_create_view = ProductListCreateAPIView.as_view()
 

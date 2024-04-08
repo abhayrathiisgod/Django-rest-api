@@ -7,3 +7,4 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductFormSerializer
     lookup_field = 'pk'
 
+#product_list_view = ProductViewSet.as_view({'get':'list'})

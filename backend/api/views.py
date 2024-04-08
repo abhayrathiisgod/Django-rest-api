@@ -77,14 +77,15 @@ def api_home(request, *args, **kwargs):
 
     #return Response(data)
 
-@api_view(['GET','POST'])
-def api_home(request, *args,**kwargs):
-    serializers = ProductFormSerializer(data=request.data)
-
-    if serializers.is_valid(raise_exception=True) == True:
-        serializers.save()
-        data = serializers.data
-        print(serializers.data)
-        return Response(data)
-
-    return Response({"WARNING":"NOT GOOD DATA"})
+@api_view(['POST'])
+def api_home(request, *args, **kwargs):
+    """
+    DRF API View
+    """
+    serializer = ProductFormSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        # instance = serializer.save()
+        # instance = form.save()
+        print(serializer.data)
+        return Response(serializer.data)
+    return Response({"invalid": "not good data"}, status=400)

@@ -3,13 +3,14 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 # from django.http import Http404
 from django.shortcuts import get_object_or_404
-from api.mixins import StaffEditorPermissionMixin
+from api.mixins import StaffEditorPermissionMixin, UserQuerySetMixin
 from .models import Product
 from .serializers import ProductFormSerializer
 
+
 class ProductListCreateAPIView(
-    StaffEditorPermissionMixin,
-    generics.ListCreateAPIView):
+        StaffEditorPermissionMixin,
+        generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
 
@@ -23,26 +24,40 @@ class ProductListCreateAPIView(
             content = title
         serializer.save(content=content)
         # sends a Django signal
-    
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        request = self.request
+
+        user = request.user
+        # below will show only those associated with the user
+        if not user.is_authenticated:
+            return Product.objects.all()
+        # print(request.user)
+        return qs.filter(user=request.user)
+
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title')
         return super.update(instance, validated_data)
 
+
 product_list_create_view = ProductListCreateAPIView.as_view()
 
-class ProductDetailAPIView(    
-    StaffEditorPermissionMixin,
-    generics.RetrieveAPIView):
+
+class ProductDetailAPIView(
+        StaffEditorPermissionMixin,
+        generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
     # lookup_field = 'pk' ??
+
 
 product_detail_view = ProductDetailAPIView.as_view()
 
 
 class ProductUpdateAPIView(
-    StaffEditorPermissionMixin,
-    generics.UpdateAPIView):
+        StaffEditorPermissionMixin,
+        generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
     lookup_field = 'pk'
@@ -51,21 +66,23 @@ class ProductUpdateAPIView(
         instance = serializer.save()
         if not instance.content:
             instance.content = instance.title
-            ## 
+            ##
+
 
 product_update_view = ProductUpdateAPIView.as_view()
 
 
 class ProductDestroyAPIView(
-    StaffEditorPermissionMixin,
-    generics.DestroyAPIView):
+        StaffEditorPermissionMixin,
+        generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
     lookup_field = 'pk'
 
     def perform_destroy(self, instance):
-        # instance 
+        # instance
         super().perform_destroy(instance)
+
 
 product_destroy_view = ProductDestroyAPIView.as_view()
 
@@ -84,12 +101,12 @@ class ProductMixinView(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     generics.GenericAPIView
-    ):
+):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
     lookup_field = 'pk'
 
-    def get(self, request, *args, **kwargs): #HTTP -> get
+    def get(self, request, *args, **kwargs):  # HTTP -> get
         pk = kwargs.get("pk")
         if pk is not None:
             return self.retrieve(request, *args, **kwargs)
@@ -97,7 +114,7 @@ class ProductMixinView(
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-    
+
     def perform_create(self, serializer):
         # serializer.save(user=self.request.user)
         title = serializer.validated_data.get('title')
@@ -108,11 +125,12 @@ class ProductMixinView(
 
     # def post(): #HTTP -> post
 
+
 product_mixin_view = ProductMixinView.as_view()
 
 # @api_view(['GET', 'POST'])
 # def product_alt_view(request, pk=None, *args, **kwargs):
-#     method = request.method  
+#     method = request.method
 
 #     if method == "GET":
 #         if pk is not None:
@@ -121,7 +139,7 @@ product_mixin_view = ProductMixinView.as_view()
 #             data = ProductFormSerializer(obj, many=False).data
 #             return Response(data)
 #         # list view
-#         queryset = Product.objects.all() 
+#         queryset = Product.objects.all()
 #         data = ProductFormSerializer(queryset, many=True).data
 #         return Response(data)
 

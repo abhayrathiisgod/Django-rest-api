@@ -16,7 +16,7 @@ from django.shortcuts import get_object_or_404
 class ProductListCreateApiView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
-    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+    #authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
     permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def perform_create(self,serializer):
@@ -32,6 +32,8 @@ product_List_create_view = ProductListCreateApiView.as_view()
 class ProductCreateApiView(generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
+
 
     def perform_create(self,serializer):
         print(serializer.validated_data)
@@ -48,12 +50,14 @@ product_create_view = ProductCreateApiView.as_view()
 class ProductDetailApiView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
 product_detail_view = ProductDetailApiView.as_view()
 
 class ProductUpdateApiView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def perform_update(self, serializer):
         instance = serializer.save()
@@ -68,6 +72,7 @@ class ProductDestroyApiView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
     lookup_field = 'pk'
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def perform_destroy(self,instance):
         super().perform_destroy(instance)
@@ -90,6 +95,7 @@ class ProductMixinView(mixins.ListModelMixin, mixins.RetrieveModelMixin ,generic
 
     queryset = Product.objects.all()
     serializer_class = ProductFormSerializer
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def get(self,request, *args,**kwargs):
         print(args,kwargs)

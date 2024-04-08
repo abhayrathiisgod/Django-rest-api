@@ -132,6 +132,11 @@ AUTH_CLASSES =[
     "api.authentication.TokenAuthentication"
 ]
 
+if DEBUG:
+    AUTH_CLASSES=[
+        "api.authentication.TokenAuthentication"
+    ]
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
@@ -139,5 +144,5 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.authentication.IsAuthenticatedOrReadOnly"
-    ]
+    ] 
 }

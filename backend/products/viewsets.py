@@ -7,7 +7,3 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductFormSerializer
     lookup_field = 'pk'
 
-class ProductGenericViewSet(viewsets.ModelViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
-    queryset = Product.objects.all()
-    serializer_class = ProductFormSerializer
-    lookup_field = 'pk'

@@ -2,14 +2,25 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 from .models import Product
 from .validators import validate_title, validate_title_no_hello
+from api.serializers import UserPublicSerializer
+
+
+class UserProductInlineSerializer(serializers.Serializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='product-detail', lookup_field='pk', read_only=True)
+    title = serializers.CharField(read_only=True)
 
 
 class ProductFormSerializer(serializers.ModelSerializer):
+    user = UserPublicSerializer(read_only=True)
+    related_products = UserProductInlineSerializer(
+        source='user.product_set.all', read_only=True, many=True)
     my_discount = serializers.SerializerMethodField(read_only=True)
     edit_url = serializers.SerializerMethodField(read_only=True)
     url = serializers.HyperlinkedIdentityField(
         view_name='product-detail', lookup_field='pk')
-    email = serializers.EmailField(write_only=True)
+    # not a good practice to put email in public serializer --- put all users in user serializer
+    # email = serializers.EmailField(write_only=True)
     title = serializers.CharField(
         validators=[validate_title, validate_title_no_hello])
     # name = serializers.CharField()
@@ -27,6 +38,7 @@ class ProductFormSerializer(serializers.ModelSerializer):
             'content',
             'price',
             'my_discount',
+            'related_products',
         ]
 
     # custom validation with serializers

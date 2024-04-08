@@ -20,4 +20,4 @@ def validate_title_no_hello(value):
 
 
 unique_product_title = UniqueValidator(
-    queryset=Product.objects.all(), lookup='iexact')
+    queryset=Product.objects.all(), lookup='iexact')  # i -> case insensitive

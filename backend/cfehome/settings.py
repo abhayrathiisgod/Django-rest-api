@@ -37,12 +37,19 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # third party api services
+    'algoliasearch_django',
+
+    # third party packages
     'rest_framework',
     'rest_framework.authtoken',
+
+    # internal apps
     'api',
     'products',
     'search',
-    'algoliasearch_django',
+
 ]
 
 
@@ -152,6 +159,7 @@ REST_FRAMEWORK = {
 }
 
 ALGOLIA = {
-    'APPLICATION_ID': 'YourApplicationID',
-    'API_KEY': 'YourWriteAPIKey'
+    'APPLICATION_ID': '2SCBOQDI50',
+    'API_KEY': 'bd5de8755345887afa1a929099a6710b',
+    'INDEX_PREFIX': 'cfe',
 }

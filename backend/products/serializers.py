@@ -34,6 +34,7 @@ class ProductFormSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'price',
+            'public',
         ]
 
     # custom validation with serializers

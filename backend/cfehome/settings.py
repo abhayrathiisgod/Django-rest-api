@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'api',
     'products',
-
+    'search',
+    'algoliasearch_django',
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -147,4 +149,9 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 2,
+}
+
+ALGOLIA = {
+    'APPLICATION_ID': 'YourApplicationID',
+    'API_KEY': 'YourWriteAPIKey'
 }

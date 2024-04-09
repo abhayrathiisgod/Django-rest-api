@@ -13,9 +13,8 @@ class UserProductInlineSerializer(serializers.Serializer):
 
 class ProductFormSerializer(serializers.ModelSerializer):
     user = UserPublicSerializer(read_only=True)
-    related_products = UserProductInlineSerializer(
-        source='user.product_set.all', read_only=True, many=True)
-    my_discount = serializers.SerializerMethodField(read_only=True)
+    # related_products = UserProductInlineSerializer(
+    #     source='user.product_set.all', read_only=True, many=True)
     edit_url = serializers.SerializerMethodField(read_only=True)
     url = serializers.HyperlinkedIdentityField(
         view_name='product-detail', lookup_field='pk')
@@ -28,17 +27,13 @@ class ProductFormSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'email',
             'url',
             'user',
             'edit_url',
             'pk',
             'title',
-            # 'name',
             'content',
             'price',
-            'my_discount',
-            'related_products',
         ]
 
     # custom validation with serializers

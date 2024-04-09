@@ -15,6 +15,6 @@ class UserQuerySetMixin():
         lookup_data = {}
         lookup_data[self.user_field] = self.request.user
         qs = super().get_queryset(*args, **kwargs)
-        if self.allow_staff_view and user.is_staff:
+        if self.allowed_staff_view and user.is_staff:
             return qs
         return qs.filter(**lookup_data)
